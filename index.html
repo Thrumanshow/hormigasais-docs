@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HormigasAIS Docs — Protocolo LBH v2.0</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0a0a0a; --amarillo: #f5c518; --verde: #00ff9f;
+    --gris: #1a1a1a; --gris2: #2a2a2a; --texto: #e8e8e8; --rojo: #ff4444;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--negro); color:var(--texto); font-family:'Space Mono',monospace; display:flex; min-height:100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 240px; min-height: 100vh; background: #111;
+    border-right: 1px solid #222; padding: 2rem 1.5rem;
+    position: fixed; top: 0; left: 0; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .sidebar-logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1rem; color:var(--amarillo); margin-bottom:1.5rem; display:block; }
+  .sidebar-logo span { color:var(--verde); }
+  .sidebar-section { font-size:0.65rem; color:#444; text-transform:uppercase; letter-spacing:0.1em; margin:1rem 0 0.4rem; }
+  .sidebar a {
+    display:block; font-size:0.75rem; color:#666; padding:0.4rem 0.6rem;
+    border-radius:4px; text-decoration:none; transition:all 0.15s;
+  }
+  .sidebar a:hover { color:var(--texto); background:#1a1a1a; }
+  .sidebar a.active { color:var(--amarillo); background:rgba(245,197,24,0.08); }
+
+  /* MAIN */
+  .content { margin-left:240px; flex:1; padding:3rem; max-width:860px; }
+
+  /* SECTIONS */
+  .doc-section { display:none; }
+  .doc-section.active { display:block; }
+
+  h1 { font-family:'Syne',sans-serif; font-size:2rem; font-weight:800; color:#fff; margin-bottom:0.5rem; }
+  h2 { font-family:'Syne',sans-serif; font-size:1.3rem; font-weight:700; color:#fff; margin:2rem 0 0.8rem; }
+  h3 { font-size:0.9rem; color:var(--amarillo); margin:1.5rem 0 0.5rem; text-transform:uppercase; letter-spacing:0.06em; }
+  p { font-size:0.82rem; color:#888; line-height:1.8; margin-bottom:1rem; }
+  .subtitle { font-size:0.85rem; color:#555; margin-bottom:2rem; }
+
+  /* BADGE VERSION */
+  .version-badge {
+    display:inline-block; background:rgba(0,255,159,0.1); border:1px solid rgba(0,255,159,0.3);
+    color:var(--verde); font-size:0.7rem; padding:0.2rem 0.7rem; border-radius:999px;
+    margin-bottom:1.5rem;
+  }
+
+  /* ENDPOINT */
+  .endpoint {
+    background:var(--gris); border:1px solid #2a2a2a; border-radius:10px;
+    overflow:hidden; margin-bottom:1.2rem;
+  }
+  .endpoint-header {
+    display:flex; align-items:center; gap:1rem; padding:0.9rem 1.2rem;
+    border-bottom:1px solid #222; cursor:pointer;
+  }
+  .method { font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; }
+  .method.GET { background:rgba(0,255,159,0.15); color:var(--verde); }
+  .method.POST { background:rgba(245,197,24,0.15); color:var(--amarillo); }
+  .endpoint-path { font-size:0.85rem; color:#fff; }
+  .endpoint-body { padding:1.2rem; }
+  .endpoint-desc { font-size:0.78rem; color:#666; margin-bottom:1rem; line-height:1.6; }
+
+  /* CODE */
+  .code-block {
+    background:var(--negro); border:1px solid #222; border-radius:6px;
+    padding:1rem 1.2rem; font-size:0.75rem; color:#aaa;
+    overflow-x:auto; white-space:pre; line-height:1.7; position:relative;
+  }
+  .code-block .k { color:var(--verde); }
+  .code-block .s { color:#e891bc; }
+  .code-block .n { color:var(--amarillo); }
+  .code-block .c { color:#555; }
+  .copy-code {
+    position:absolute; top:0.6rem; right:0.6rem;
+    background:var(--gris2); border:1px solid #333; color:#666;
+    font-family:'Space Mono',monospace; font-size:0.65rem; padding:0.3rem 0.6rem;
+    border-radius:4px; cursor:pointer; transition:all 0.2s;
+  }
+  .copy-code:hover { color:var(--amarillo); border-color:var(--amarillo); }
+
+  /* PLAN TABLE */
+  .plan-table { width:100%; border-collapse:collapse; margin:1rem 0; font-size:0.78rem; }
+  .plan-table th { background:var(--gris2); color:#aaa; padding:0.7rem 1rem; text-align:left; font-weight:400; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.06em; }
+  .plan-table td { padding:0.7rem 1rem; border-bottom:1px solid #1a1a1a; color:#888; }
+  .plan-table tr:last-child td { border:none; }
+  .plan-table .highlight { color:var(--amarillo); font-weight:700; }
+
+  /* WIDGET PREVIEW */
+  .widget-preview {
+    background:#f5f5f5; border-radius:8px; padding:1.5rem;
+    margin:1rem 0; text-align:center;
+  }
+  #liveWidget { display:inline-block; }
+
+  /* ALERT */
+  .alert {
+    background:rgba(245,197,24,0.06); border:1px solid rgba(245,197,24,0.2);
+    border-radius:8px; padding:1rem 1.2rem; font-size:0.78rem; color:#aaa;
+    line-height:1.7; margin:1rem 0;
+  }
+  .alert strong { color:var(--amarillo); }
+
+  /* NAV MOBILE */
+  .mobile-nav { display:none; }
+
+  @media (max-width: 700px) {
+    .sidebar { display:none; }
+    .content { margin-left:0; padding:1.5rem; }
+    .mobile-nav {
+      display:flex; overflow-x:auto; gap:0.5rem; padding:1rem;
+      background:#111; border-bottom:1px solid #222; position:sticky; top:0; z-index:10;
+    }
+    .mobile-nav a { font-size:0.7rem; color:#666; text-decoration:none; white-space:nowrap; padding:0.4rem 0.8rem; border:1px solid #333; border-radius:4px; }
+    .mobile-nav a.active { color:var(--amarillo); border-color:var(--amarillo); }
+  }
+</style>
+</head>
+<body>
+
+<nav class="mobile-nav">
+  <a href="#" class="active" onclick="showDoc('inicio',this);return false;">Inicio</a>
+  <a href="#" onclick="showDoc('quickstart',this);return false;">Quickstart</a>
+  <a href="#" onclick="showDoc('endpoints',this);return false;">Endpoints</a>
+  <a href="#" onclick="showDoc('widget',this);return false;">Widget</a>
+  <a href="#" onclick="showDoc('planes',this);return false;">Planes</a>
+</nav>
+
+<aside class="sidebar">
+  <span class="sidebar-logo">🐜 HormigasAIS<span>.</span></span>
+
+  <span class="sidebar-section">Introducción</span>
+  <a href="#" class="active" onclick="showDoc('inicio',this);return false;">¿Qué es LBH?</a>
+  <a href="#" onclick="showDoc('quickstart',this);return false;">Quickstart</a>
+
+  <span class="sidebar-section">API Reference</span>
+  <a href="#" onclick="showDoc('endpoints',this);return false;">Endpoints</a>
+  <a href="#" onclick="showDoc('autenticacion',this);return false;">Autenticación</a>
+  <a href="#" onclick="showDoc('errores',this);return false;">Errores</a>
+
+  <span class="sidebar-section">Integración</span>
+  <a href="#" onclick="showDoc('widget',this);return false;">Widget embebible</a>
+  <a href="#" onclick="showDoc('badge',this);return false;">Badge PNG</a>
+
+  <span class="sidebar-section">Comercial</span>
+  <a href="#" onclick="showDoc('planes',this);return false;">Planes y precios</a>
+  <a href="#" onclick="showDoc('sla',this);return false;">SLA Enterprise</a>
+
+  <span class="sidebar-section">Recursos</span>
+  <a href="https://hormigasais.com" target="_blank">↗ hormigasais.com</a>
+  <a href="https://github.com/HormigasAIS" target="_blank">↗ GitHub</a>
+</aside>
+
+<main class="content">
+
+  <!-- INICIO -->
+  <section class="doc-section active" id="inicio">
+    <div class="version-badge">LBH Protocol v2.0 — Producción</div>
+    <h1>Protocolo LBH</h1>
+    <p class="subtitle">Lenguaje Binario HormigasAIS — Documentación oficial</p>
+    <p>El Protocolo LBH (Lenguaje Binario HormigasAIS) es el primer sistema de certificación criptográfica de activos digitales desarrollado desde el borde (Edge Computing), operado desde Android/Termux en San Miguel, El Salvador. Sin servidores centralizados. Sin nube. Soberanía total.</p>
+
+    <h2>¿Qué puedes hacer con LBH?</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0;">
+      <div style="background:var(--gris);border:1px solid #2a2a2a;border-radius:8px;padding:1.2rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.5rem;">🔏</div>
+        <div style="font-size:0.82rem;color:#fff;font-weight:700;margin-bottom:0.3rem;">Sellar activos</div>
+        <div style="font-size:0.75rem;color:#666;">Certifica imágenes, documentos y archivos digitales con una firma CLHQ única e irrepetible.</div>
+      </div>
+      <div style="background:var(--gris);border:1px solid #2a2a2a;border-radius:8px;padding:1.2rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.5rem;">🔍</div>
+        <div style="font-size:0.82rem;color:#fff;font-weight:700;margin-bottom:0.3rem;">Verificar autenticidad</div>
+        <div style="font-size:0.75rem;color:#666;">Cualquier persona puede verificar un sello LBH públicamente sin necesidad de cuenta.</div>
+      </div>
+      <div style="background:var(--gris);border:1px solid #2a2a2a;border-radius:8px;padding:1.2rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.5rem;">🏷️</div>
+        <div style="font-size:0.82rem;color:#fff;font-weight:700;margin-bottom:0.3rem;">Badge descargable</div>
+        <div style="font-size:0.75rem;color:#666;">Genera un badge PNG con tu firma para pegar en tu sitio web y redes sociales.</div>
+      </div>
+      <div style="background:var(--gris);border:1px solid #2a2a2a;border-radius:8px;padding:1.2rem;">
+        <div style="font-size:1.2rem;margin-bottom:0.5rem;">🔗</div>
+        <div style="font-size:0.82rem;color:#fff;font-weight:700;margin-bottom:0.3rem;">Widget embebible</div>
+        <div style="font-size:0.75rem;color:#666;">Integra verificación LBH en vivo en cualquier sitio web con una línea de HTML.</div>
+      </div>
+    </div>
+
+    <div class="alert">
+      <strong>Base URL:</strong> <code>https://api.hormigasais.com</code><br>
+      <strong>Nodo maestro:</strong> A16-SanMiguel-SV<br>
+      <strong>Fundador:</strong> Cristhiam Leonardo Hernández Quiñonez (CLHQ)<br>
+      <strong>DOI:</strong> 10.5281/zenodo.19177759
+    </div>
+  </section>
+
+  <!-- QUICKSTART -->
+  <section class="doc-section" id="quickstart">
+    <h1>Quickstart</h1>
+    <p class="subtitle">Sella tu primer activo en menos de 2 minutos</p>
+
+    <h3>1. Verificar que el nodo está activo</h3>
+    <div class="code-block"><span class="c"># Terminal / cURL</span>
+curl https://api.hormigasais.com/verify
+<span class="c"># Respuesta esperada:</span>
+{
+  <span class="k">"status"</span>: <span class="s">"VALIDADO"</span>,
+  <span class="k">"signature"</span>: <span class="s">"CLHQ-MASTER-KEY"</span>,
+  <span class="k">"protocol"</span>: <span class="s">"Lenguaje-Binario-HormigasAIS"</span>
+}</div>
+
+    <h3>2. Sellar un activo</h3>
+    <div class="code-block"><span class="c"># POST /seal</span>
+curl -X POST https://api.hormigasais.com/seal \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d '{
+    <span class="k">"owner"</span>: <span class="s">"Tu-Nombre"</span>,
+    <span class="k">"asset"</span>: <span class="s">"mi-logo.png"</span>,
+    <span class="k">"hash"</span>: <span class="s">"sha256-del-archivo"</span>
+  }'
+<span class="c"># Respuesta:</span>
+{
+  <span class="k">"status"</span>: <span class="s">"SELLADO"</span>,
+  <span class="k">"sello"</span>: {
+    <span class="k">"signature"</span>: <span class="s">"CLHQ-A8F3K2M1"</span>,
+    <span class="k">"owner"</span>: <span class="s">"Tu-Nombre"</span>,
+    <span class="k">"protocol"</span>: <span class="s">"Lenguaje-Binario-HormigasAIS"</span>,
+    <span class="k">"timestamp"</span>: <span class="s">"2026-05-08T..."</span>
+  }
+}</div>
+
+    <h3>3. Verificar el sello</h3>
+    <div class="code-block">curl https://api.hormigasais.com/seal/<span class="n">CLHQ-A8F3K2M1</span>
+<span class="c"># Respuesta:</span>
+{
+  <span class="k">"status"</span>: <span class="s">"VERIFICADO"</span>,
+  <span class="k">"sello"</span>: { ... }
+}</div>
+
+    <h3>4. JavaScript / Fetch</h3>
+    <div class="code-block"><span class="c">// Sellar un activo desde el navegador</span>
+<span class="k">const</span> res = <span class="k">await</span> fetch(<span class="s">'https://api.hormigasais.com/seal'</span>, {
+  method: <span class="s">'POST'</span>,
+  headers: { <span class="s">'Content-Type'</span>: <span class="s">'application/json'</span> },
+  body: JSON.stringify({
+    owner: <span class="s">'Mi-Empresa'</span>,
+    asset: <span class="s">'logo-v2.png'</span>,
+    hash: <span class="s">'abc123...'</span>
+  })
+});
+<span class="k">const</span> data = <span class="k">await</span> res.json();
+console.log(data.sello.signature); <span class="c">// CLHQ-XXXXXXXX</span></div>
+  </section>
+
+  <!-- ENDPOINTS -->
+  <section class="doc-section" id="endpoints">
+    <h1>Endpoints</h1>
+    <p class="subtitle">Referencia completa de la API LBH v2.0</p>
+
+    <div class="endpoint">
+      <div class="endpoint-header"><span class="method GET">GET</span><span class="endpoint-path">/verify</span></div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Verifica que el nodo soberano A16 está activo y retorna la firma maestra del protocolo. No requiere autenticación.</p>
+        <div class="code-block">{ <span class="k">"status"</span>: <span class="s">"VALIDADO"</span>, <span class="k">"signature"</span>: <span class="s">"CLHQ-MASTER-KEY"</span>, <span class="k">"origin"</span>: <span class="s">"Nodo-Soberano-A16"</span> }</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header"><span class="method POST">POST</span><span class="endpoint-path">/seal</span></div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Registra un sello criptográfico para un activo digital. Retorna una firma CLHQ única verificable públicamente.</p>
+        <div class="code-block"><span class="c">// Request body</span>
+{
+  <span class="k">"owner"</span>:  <span class="s">"string"</span>  <span class="c">// Nombre del propietario</span>
+  <span class="k">"asset"</span>:  <span class="s">"string"</span>  <span class="c">// Descripción del activo</span>
+  <span class="k">"hash"</span>:   <span class="s">"string"</span>  <span class="c">// SHA-256 del archivo (opcional)</span>
+  <span class="k">"plan"</span>:   <span class="s">"free|premium|enterprise"</span>
+}
+<span class="c">// Response 200</span>
+{
+  <span class="k">"status"</span>: <span class="s">"SELLADO"</span>,
+  <span class="k">"sello"</span>: {
+    <span class="k">"signature"</span>:  <span class="s">"CLHQ-XXXXXXXX"</span>,
+    <span class="k">"owner"</span>:      <span class="s">"string"</span>,
+    <span class="k">"asset"</span>:      <span class="s">"string"</span>,
+    <span class="k">"protocol"</span>:   <span class="s">"Lenguaje-Binario-HormigasAIS"</span>,
+    <span class="k">"nodo"</span>:       <span class="s">"A16-SanMiguel-SV"</span>,
+    <span class="k">"timestamp"</span>:  <span class="s">"ISO 8601"</span>
+  }
+}</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header"><span class="method GET">GET</span><span class="endpoint-path">/seal/{firma}</span></div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Verifica la autenticidad de un sello por su firma CLHQ. Público y sin autenticación.</p>
+        <div class="code-block"><span class="c">// GET /seal/CLHQ-A8F3K2M1</span>
+{ <span class="k">"status"</span>: <span class="s">"VERIFICADO"</span>, <span class="k">"sello"</span>: { ... } }
+<span class="c">// Si no existe:</span>
+{ <span class="k">"error"</span>: <span class="s">"Sello no encontrado"</span> } <span class="n">// 404</span></div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header"><span class="method POST">POST</span><span class="endpoint-path">/push/{nodo}</span></div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Envía una feromona de aprendizaje desde un nodo de la colonia al registro distribuido.</p>
+        <div class="code-block">{ <span class="k">"type"</span>: <span class="s">"learning"</span>, <span class="k">"value"</span>: <span class="n">0.85</span>, <span class="k">"trust"</span>: <span class="n">0.9</span> }</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header"><span class="method GET">GET</span><span class="endpoint-path">/consensus</span></div>
+      <div class="endpoint-body">
+        <p class="endpoint-desc">Retorna el consenso distribuido de la colonia basado en el promedio de valores de todos los nodos.</p>
+        <div class="code-block">{ <span class="k">"consensus"</span>: <span class="s">"ACEPTAR"</span>, <span class="k">"promedio"</span>: <span class="s">"0.7823"</span>, <span class="k">"nodos"</span>: <span class="n">9</span> }</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTENTICACIÓN -->
+  <section class="doc-section" id="autenticacion">
+    <h1>Autenticación</h1>
+    <p class="subtitle">Acceso a la API LBH</p>
+    <p>Los endpoints públicos (<code>/verify</code>, <code>/seal/{firma}</code>, <code>/all</code>, <code>/consensus</code>) no requieren autenticación.</p>
+    <p>El endpoint <code>/seal</code> (POST) es público en plan Free. Para planes Premium y Enterprise, próximamente se implementará autenticación via API Key con header:</p>
+    <div class="code-block">Authorization: Bearer <span class="s">LBH-APIKEY-XXXXXXXX</span></div>
+    <div class="alert"><strong>Nota:</strong> Durante la fase de lanzamiento, todos los endpoints son accesibles sin autenticación para facilitar la adopción del protocolo.</div>
+  </section>
+
+  <!-- ERRORES -->
+  <section class="doc-section" id="errores">
+    <h1>Manejo de errores</h1>
+    <p class="subtitle">Códigos de respuesta de la API LBH</p>
+    <table class="plan-table">
+      <tr><th>Código</th><th>Significado</th><th>Acción recomendada</th></tr>
+      <tr><td class="highlight">200</td><td>Éxito</td><td>Procesar respuesta normalmente</td></tr>
+      <tr><td class="highlight">400</td><td>Paquete LBH inválido</td><td>Verificar formato del body JSON</td></tr>
+      <tr><td class="highlight">404</td><td>Ruta o sello no encontrado</td><td>Verificar la firma CLHQ</td></tr>
+      <tr><td class="highlight">500</td><td>Error interno del nodo</td><td>Reintentar en 30 segundos</td></tr>
+    </table>
+    <div class="code-block"><span class="c">// Formato de error</span>
+{ <span class="k">"error"</span>: <span class="s">"descripción del error"</span> }</div>
+  </section>
+
+  <!-- WIDGET -->
+  <section class="doc-section" id="widget">
+    <h1>Widget embebible</h1>
+    <p class="subtitle">Agrega verificación LBH en vivo a cualquier sitio web</p>
+
+    <p>El widget LBH permite que cualquier visitante de tu sitio verifique la autenticidad de tu sello directamente, sin salir de tu página.</p>
+
+    <h3>Vista previa</h3>
+    <div class="widget-preview">
+      <div id="liveWidget">
+        <div style="background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:1rem;font-family:'Space Mono',monospace;font-size:0.75rem;color:#e8e8e8;display:inline-block;min-width:300px;text-align:left;">
+          <div style="color:#f5c518;font-weight:700;margin-bottom:0.5rem;">🐜 Certificado LBH</div>
+          <div id="widgetStatus" style="color:#555;font-size:0.7rem;">Cargando...</div>
+          <div id="widgetSig" style="color:#00ff9f;margin:0.3rem 0;font-size:0.8rem;"></div>
+          <div id="widgetOwner" style="color:#aaa;font-size:0.7rem;"></div>
+          <div style="margin-top:0.5rem;font-size:0.65rem;color:#444;">Protocolo: Lenguaje-Binario-HormigasAIS</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Código para pegar en tu sitio</h3>
+    <div class="code-block">&lt;!-- Widget HormigasAIS LBH --&gt;
+&lt;div id=<span class="s">"lbh-widget"</span> data-sig=<span class="s">"CLHQ-XXXXXXXX"</span>&gt;&lt;/div&gt;
+&lt;script src=<span class="s">"https://docs.hormigasais.com/widget.js"</span>&gt;&lt;/script&gt;</div>
+
+    <h3>Personalización</h3>
+    <div class="code-block">&lt;div id=<span class="s">"lbh-widget"</span>
+     data-sig=<span class="s">"CLHQ-XXXXXXXX"</span>
+     data-theme=<span class="s">"dark"</span>      <span class="c">&lt;!-- dark | light --&gt;</span>
+     data-lang=<span class="s">"es"</span>        <span class="c">&lt;!-- es | en --&gt;</span>
+     data-compact=<span class="s">"true"</span>&gt;  <span class="c">&lt;!-- true | false --&gt;</span>
+&lt;/div&gt;
+&lt;script src=<span class="s">"https://docs.hormigasais.com/widget.js"</span>&gt;&lt;/script&gt;</div>
+  </section>
+
+  <!-- BADGE -->
+  <section class="doc-section" id="badge">
+    <h1>Badge PNG</h1>
+    <p class="subtitle">Muestra tu certificado LBH visualmente</p>
+    <p>Genera tu badge en <a href="https://hormigasais.com" style="color:var(--amarillo);">hormigasais.com</a> → pestaña 🏷️ Badge. El badge incluye tu firma CLHQ, plan activo, fecha de expiración y enlace de verificación.</p>
+    <h3>Ejemplo de uso en HTML</h3>
+    <div class="code-block">&lt;a href=<span class="s">"https://hormigasais.com/verify"</span> target=<span class="s">"_blank"</span>&gt;
+  &lt;img src=<span class="s">"./badge-lbh-CLHQ-XXXXXXXX.png"</span>
+       alt=<span class="s">"Certificado LBH HormigasAIS"</span>
+       height=<span class="s">"60"</span>&gt;
+&lt;/a&gt;</div>
+    <h3>Ejemplo en Markdown (GitHub, README)</h3>
+    <div class="code-block">[![Certificado LBH](./badge-lbh-CLHQ-XXXXXXXX.png)](https://hormigasais.com)</div>
+  </section>
+
+  <!-- PLANES -->
+  <section class="doc-section" id="planes">
+    <h1>Planes y precios</h1>
+    <p class="subtitle">Precios de lanzamiento — sujetos a revisión</p>
+    <table class="plan-table">
+      <tr><th>Plan</th><th>Sellos</th><th>Validez</th><th>Precio</th><th>Canal de pago</th></tr>
+      <tr><td class="highlight">Free</td><td>3 total</td><td>30 días</td><td>$0</td><td>—</td></tr>
+      <tr><td class="highlight">Premium</td><td>Ilimitados</td><td>1 año</td><td>$9.99/mes</td><td>GitHub Sponsors / PayPal</td></tr>
+      <tr><td class="highlight">Enterprise</td><td>API masiva</td><td>Permanente</td><td>$49/mes</td><td>GitHub Sponsors / PayPal</td></tr>
+    </table>
+    <div class="alert">
+      <strong>⚠️ Cláusula de precios dinámicos:</strong> HormigasAIS está en fase de lanzamiento. Los precios actuales son de introducción y pueden ajustarse según los costos operativos, expansión de infraestructura y nuevas funcionalidades del Protocolo LBH. Los usuarios con plan activo serán notificados con 30 días de anticipación ante cualquier cambio.
+    </div>
+    <p>Para activar Premium o Enterprise: <a href="https://github.com/sponsors/Thrumanshow" target="_blank" style="color:var(--amarillo);">GitHub Sponsors →</a></p>
+  </section>
+
+  <!-- SLA -->
+  <section class="doc-section" id="sla">
+    <h1>SLA Enterprise</h1>
+    <p class="subtitle">Acuerdo de nivel de servicio para clientes Enterprise</p>
+    <h3>Disponibilidad garantizada</h3>
+    <p>El nodo A16-SanMiguel-SV opera con sistema de auto-recuperación soberana. En caso de interrupción, el sistema se restaura automáticamente.</p>
+    <h3>Tiempos de respuesta</h3>
+    <table class="plan-table">
+      <tr><th>Incidente</th><th>Tiempo de respuesta</th></tr>
+      <tr><td>API caída</td><td>Restauración automática &lt; 5 min</td></tr>
+      <tr><td>Soporte crítico</td><td>Respuesta directa CLHQ &lt; 24h</td></tr>
+      <tr><td>Actualizaciones</td><td>Notificación 48h previa</td></tr>
+    </table>
+    <p>Para contratar Enterprise: <a href="https://github.com/sponsors/Thrumanshow" target="_blank" style="color:var(--amarillo);">Contactar via GitHub Sponsors →</a></p>
+  </section>
+
+</main>
+
+<!-- WIDGET SCRIPT embebible -->
+<script id="widgetScript">
+const API = 'https://api.hormigasais.com';
+
+// Widget live en docs
+async function loadDocWidget() {
+  try {
+    const r = await fetch(API + '/verify');
+    const d = await r.json();
+    document.getElementById('widgetStatus').textContent = '✅ ' + d.status;
+    document.getElementById('widgetSig').textContent = d.signature;
+    document.getElementById('widgetOwner').textContent = 'Nodo: ' + d.origin;
+  } catch(e) {
+    document.getElementById('widgetStatus').textContent = '⚠️ Reconectando...';
+  }
+}
+
+function showDoc(id, el) {
+  document.querySelectorAll('.doc-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sidebar a, .mobile-nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) el.classList.add('active');
+  // Activar también en sidebar si viene de mobile
+  document.querySelectorAll('.sidebar a').forEach(a => {
+    if (a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'")) {
+      a.classList.add('active');
+    }
+  });
+}
+
+loadDocWidget();
+</script>
+
+</body>
+</html>
