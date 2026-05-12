@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de uso — Certificado LBH HormigasAIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root { --negro:#0a0a0a; --amarillo:#f5c518; --verde:#00ff9f; --gris:#1a1a1a; --texto:#e8e8e8; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--negro); color:var(--texto); font-family:'Space Mono',monospace; }
+  body::before { content:''; position:fixed; inset:0; background-image:linear-gradient(rgba(245,197,24,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(245,197,24,0.03) 1px,transparent 1px); background-size:40px 40px; pointer-events:none; z-index:0; }
+
+  header { position:relative; z-index:1; padding:1.5rem 2rem; border-bottom:1px solid #222; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+  .logo { font-family:'Syne',sans-serif; font-weight:800; font-size:1.2rem; color:var(--amarillo); }
+  .logo span { color:var(--verde); }
+  .lang-toggle { display:flex; gap:0.5rem; }
+  .lang-btn { background:none; border:1px solid #333; color:#666; font-family:'Space Mono',monospace; font-size:0.75rem; padding:0.3rem 0.8rem; border-radius:4px; cursor:pointer; transition:all 0.2s; }
+  .lang-btn.active { border-color:var(--amarillo); color:var(--amarillo); }
+
+  .content { position:relative; z-index:1; max-width:800px; margin:0 auto; padding:3rem 2rem; }
+
+  .lang-section { display:none; }
+  .lang-section.active { display:block; }
+
+  h1 { font-family:'Syne',sans-serif; font-size:1.8rem; font-weight:800; color:#fff; margin-bottom:0.5rem; }
+  .subtitle { color:#555; font-size:0.82rem; margin-bottom:2.5rem; line-height:1.6; }
+
+  .step { background:var(--gris); border:1px solid #2a2a2a; border-radius:12px; padding:1.8rem; margin-bottom:1.5rem; position:relative; }
+  .step-num { position:absolute; top:-14px; left:1.5rem; background:var(--amarillo); color:var(--negro); font-family:'Syne',sans-serif; font-weight:800; font-size:0.85rem; padding:0.2rem 0.8rem; border-radius:999px; }
+  .step h2 { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:#fff; margin-bottom:0.5rem; margin-top:0.5rem; }
+  .step p { font-size:0.78rem; color:#888; line-height:1.8; margin-bottom:1rem; }
+  .step .tip { background:rgba(0,255,159,0.06); border:1px solid rgba(0,255,159,0.15); border-radius:6px; padding:0.8rem 1rem; font-size:0.75rem; color:#aaa; line-height:1.7; margin-bottom:1rem; }
+  .step .tip strong { color:var(--verde); }
+  .step .warning { background:rgba(245,197,24,0.06); border:1px solid rgba(245,197,24,0.15); border-radius:6px; padding:0.8rem 1rem; font-size:0.75rem; color:#aaa; line-height:1.7; margin-bottom:1rem; }
+  .step .warning strong { color:var(--amarillo); }
+
+  .code-block { background:var(--negro); border:1px solid #222; border-radius:6px; padding:1rem; font-size:0.72rem; color:#aaa; overflow-x:auto; white-space:pre; line-height:1.7; margin:0.8rem 0; }
+
+  .resources { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-top:0.8rem; }
+  .resource-link { background:var(--negro); border:1px solid #333; border-radius:6px; padding:0.8rem; font-size:0.72rem; color:var(--amarillo); text-decoration:none; transition:border 0.2s; display:block; }
+  .resource-link:hover { border-color:var(--amarillo); }
+  .resource-link .res-title { font-weight:700; margin-bottom:0.2rem; }
+  .resource-link .res-desc { color:#555; font-size:0.65rem; }
+
+  .final-note { background:rgba(245,197,24,0.06); border:1px solid rgba(245,197,24,0.2); border-radius:8px; padding:1.5rem; margin-top:2rem; font-size:0.78rem; color:#888; line-height:1.8; text-align:center; }
+  .final-note strong { color:var(--amarillo); }
+
+  footer { position:relative; z-index:1; text-align:center; padding:2rem; border-top:1px solid #1a1a1a; color:#333; font-size:0.72rem; }
+  footer span { color:var(--amarillo); }
+
+  @media(max-width:600px) { .resources { grid-template-columns:1fr; } .content { padding:2rem 1rem; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🐜 HormigasAIS<span>.</span> — Manual</div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('es',this)">🇪🇸 Español</button>
+    <button class="lang-btn" onclick="setLang('en',this)">🇺🇸 English</button>
+  </div>
+</header>
+
+<div class="content">
+
+<!-- ══════════════ ESPAÑOL ══════════════ -->
+<div class="lang-section active" id="lang-es">
+  <h1>¿Cómo usar tu Certificado LBH?</h1>
+  <p class="subtitle">Descargaste tu archivo <strong style="color:var(--amarillo)">manifest-CLHQ-XXXXXXXX.json</strong> — aquí te explicamos exactamente qué hacer con él en 4 pasos simples. No necesitas ser programador.</p>
+
+  <!-- PASO 1 -->
+  <div class="step">
+    <div class="step-num">Paso 1</div>
+    <h2>🌐 En tu sitio web</h2>
+    <p>Si tienes un sitio web, puedes mostrar tu certificado LBH como un sello de autenticidad que cualquier visitante puede verificar.</p>
+    <div class="tip"><strong>¿Qué hacer?</strong> Sube tu archivo <code>manifest-CLHQ-XXXXXXXX.json</code> y tu badge <code>badge-CLHQ-XXXXXXXX.png</code> a tu sitio web. Luego agrega este código HTML en tu página:</div>
+    <div class="code-block">&lt;!-- Sello de propiedad intelectual LBH --&gt;
+&lt;a href="https://hormigasais.com" target="_blank"&gt;
+  &lt;img src="badge-CLHQ-XXXXXXXX.png"
+       alt="Certificado LBH HormigasAIS"
+       height="60"&gt;
+&lt;/a&gt;
+&lt;p&gt;Firma: CLHQ-XXXXXXXX — Verificar en hormigasais.com&lt;/p&gt;</div>
+    <div class="warning"><strong>¿No tienes sitio web?</strong> No te preocupes. Puedes crear uno gratis en menos de 10 minutos:</div>
+    <div class="resources">
+      <a href="https://pages.github.com" target="_blank" class="resource-link">
+        <div class="res-title">🐙 GitHub Pages</div>
+        <div class="res-desc">Gratis, ideal para portfolios y proyectos. Requiere cuenta GitHub.</div>
+      </a>
+      <a href="https://carrd.co" target="_blank" class="resource-link">
+        <div class="res-title">🃏 Carrd.co</div>
+        <div class="res-desc">Sitios de una página, muy fácil. Plan gratuito disponible.</div>
+      </a>
+      <a href="https://notion.so" target="_blank" class="resource-link">
+        <div class="res-title">📝 Notion</div>
+        <div class="res-desc">Publica páginas públicas con tu certificado en segundos.</div>
+      </a>
+      <a href="https://linktr.ee" target="_blank" class="resource-link">
+        <div class="res-title">🌿 Linktree</div>
+        <div class="res-desc">Una página con todos tus links, incluyendo tu certificado.</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="step">
+    <div class="step-num">Paso 2</div>
+    <h2>🐙 En GitHub (README de tu proyecto)</h2>
+    <p>Si tienes proyectos en GitHub, puedes mostrar tu certificado LBH en el README para demostrar que tu código o contenido está protegido.</p>
+    <div class="tip"><strong>¿Qué hacer?</strong> Sube tu badge al repo y agrega esta línea en tu archivo <code>README.md</code>:</div>
+    <div class="code-block">[![Certificado LBH](./badge-CLHQ-XXXXXXXX.png)](https://hormigasais.com)</div>
+    <p>Reemplaza <code>CLHQ-XXXXXXXX</code> con tu firma real.</p>
+    <div class="warning"><strong>¿No tienes cuenta en GitHub?</strong> Sigue estos pasos:</div>
+    <div class="tip">
+      <strong>1.</strong> Ve a <a href="https://github.com/signup" target="_blank" style="color:var(--amarillo)">github.com/signup</a> y crea tu cuenta gratis<br>
+      <strong>2.</strong> Haz clic en "New repository" → ponle nombre → clic en "Create repository"<br>
+      <strong>3.</strong> Sube tu badge arrastrándolo o con "Upload files"<br>
+      <strong>4.</strong> Crea un archivo <code>README.md</code> y agrega el código de arriba<br>
+      <strong>5.</strong> Tu certificado ya es visible públicamente en tu repo
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="step">
+    <div class="step-num">Paso 3</div>
+    <h2>📱 En redes sociales</h2>
+    <p>El badge PNG de tu certificado es una imagen que puedes compartir directamente en cualquier red social.</p>
+    <div class="tip"><strong>¿Qué hacer?</strong> Descarga tu badge desde <a href="https://hormigasais.com" target="_blank" style="color:var(--amarillo)">hormigasais.com</a> → pestaña 🏷️ Badge. Luego:</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;"><strong style="color:#fff;">Instagram / Facebook:</strong></p>
+    <div class="code-block">Publica la imagen del badge como foto.
+En la descripción escribe:
+"Activo certificado con el Protocolo LBH 🐜
+Firma: CLHQ-XXXXXXXX
+Verificar en: hormigasais.com"</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;margin-top:0.8rem;"><strong style="color:#fff;">LinkedIn (recomendado para profesionales):</strong></p>
+    <div class="code-block">1. Ve a tu perfil → "Licencias y certificaciones"
+2. Nombre: "Certificado LBH — HormigasAIS"
+3. Entidad emisora: "HormigasAIS"
+4. URL de credencial: https://hormigasais.com
+5. ID de credencial: CLHQ-XXXXXXXX</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;margin-top:0.8rem;"><strong style="color:#fff;">Twitter / X:</strong></p>
+    <div class="code-block">Adjunta la imagen del badge al tweet:
+"Mi [logo/diseño/proyecto] está certificado con
+el Protocolo LBH 🐜 Firma: CLHQ-XXXXXXXX
+Verificar: hormigasais.com #LBH #HormigasAIS"</div>
+  </div>
+
+  <!-- PASO 4 -->
+  <div class="step">
+    <div class="step-num">Paso 4</div>
+    <h2>📄 En contratos y documentos digitales</h2>
+    <p>Tu manifest es un documento criptográfico que puede adjuntarse a contratos para demostrar la propiedad de un activo en una fecha específica.</p>
+    <div class="tip"><strong>¿Qué hacer?</strong> El archivo <code>manifest-CLHQ-XXXXXXXX.json</code> contiene la firma, el hash SHA-256 del activo, la fecha de emisión y el nodo que lo certifica. Úsalo así:</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;"><strong style="color:#fff;">En PDF / Word:</strong></p>
+    <div class="code-block">Adjunta el archivo manifest-CLHQ-XXXXXXXX.json
+como "Anexo A: Certificado de Propiedad Intelectual LBH"
+
+Incluye en el texto del contrato:
+"El activo [nombre] está certificado bajo el
+Protocolo LBH v2.0, firma CLHQ-XXXXXXXX,
+emitido el [fecha], verificable en hormigasais.com"</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;margin-top:0.8rem;"><strong style="color:#fff;">En contratos digitales (DocuSign, Adobe Sign, etc.):</strong></p>
+    <div class="code-block">1. Adjunta el manifest como documento adicional
+2. En la descripción del contrato incluye la firma CLHQ
+3. El hash SHA-256 en el manifest prueba que el archivo
+   no ha sido modificado desde la fecha de emisión</div>
+
+    <div class="warning"><strong>Valor legal:</strong> El manifest LBH es evidencia técnica de la existencia de un activo en una fecha determinada. Para contratos con valor legal completo, consulta un abogado en tu jurisdicción.</div>
+  </div>
+
+  <div class="final-note">
+    🐜 ¿Tienes dudas? Escríbenos a <strong>chrisquionez354@gmail.com</strong><br>
+    Documentación completa: <strong>docs.hormigasais.com</strong><br>
+    Protocolo LBH v2.0 — Desarrollado en San Miguel, El Salvador
+  </div>
+</div>
+
+<!-- ══════════════ ENGLISH ══════════════ -->
+<div class="lang-section" id="lang-en">
+  <h1>How to use your LBH Certificate?</h1>
+  <p class="subtitle">You downloaded your <strong style="color:var(--amarillo)">manifest-CLHQ-XXXXXXXX.json</strong> file — here we explain exactly what to do with it in 4 simple steps. No programming skills required.</p>
+
+  <!-- STEP 1 -->
+  <div class="step">
+    <div class="step-num">Step 1</div>
+    <h2>🌐 On your website</h2>
+    <p>If you have a website, you can display your LBH certificate as an authenticity seal that any visitor can verify.</p>
+    <div class="tip"><strong>What to do?</strong> Upload your <code>manifest-CLHQ-XXXXXXXX.json</code> and badge <code>badge-CLHQ-XXXXXXXX.png</code> files to your website. Then add this HTML code to your page:</div>
+    <div class="code-block">&lt;!-- LBH Intellectual Property Seal --&gt;
+&lt;a href="https://hormigasais.com" target="_blank"&gt;
+  &lt;img src="badge-CLHQ-XXXXXXXX.png"
+       alt="LBH Certificate HormigasAIS"
+       height="60"&gt;
+&lt;/a&gt;
+&lt;p&gt;Signature: CLHQ-XXXXXXXX — Verify at hormigasais.com&lt;/p&gt;</div>
+    <div class="warning"><strong>Don't have a website?</strong> No problem. You can create one for free in under 10 minutes:</div>
+    <div class="resources">
+      <a href="https://pages.github.com" target="_blank" class="resource-link">
+        <div class="res-title">🐙 GitHub Pages</div>
+        <div class="res-desc">Free, ideal for portfolios and projects. Requires GitHub account.</div>
+      </a>
+      <a href="https://carrd.co" target="_blank" class="resource-link">
+        <div class="res-title">🃏 Carrd.co</div>
+        <div class="res-desc">One-page sites, very easy. Free plan available.</div>
+      </a>
+      <a href="https://notion.so" target="_blank" class="resource-link">
+        <div class="res-title">📝 Notion</div>
+        <div class="res-desc">Publish public pages with your certificate in seconds.</div>
+      </a>
+      <a href="https://linktr.ee" target="_blank" class="resource-link">
+        <div class="res-title">🌿 Linktree</div>
+        <div class="res-desc">A page with all your links, including your certificate.</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step">
+    <div class="step-num">Step 2</div>
+    <h2>🐙 On GitHub (Project README)</h2>
+    <p>If you have projects on GitHub, you can display your LBH certificate in the README to prove your code or content is protected.</p>
+    <div class="tip"><strong>What to do?</strong> Upload your badge to the repo and add this line to your <code>README.md</code> file:</div>
+    <div class="code-block">[![LBH Certificate](./badge-CLHQ-XXXXXXXX.png)](https://hormigasais.com)</div>
+    <p>Replace <code>CLHQ-XXXXXXXX</code> with your actual signature.</p>
+    <div class="warning"><strong>Don't have a GitHub account?</strong> Follow these steps:</div>
+    <div class="tip">
+      <strong>1.</strong> Go to <a href="https://github.com/signup" target="_blank" style="color:var(--amarillo)">github.com/signup</a> and create your free account<br>
+      <strong>2.</strong> Click "New repository" → give it a name → click "Create repository"<br>
+      <strong>3.</strong> Upload your badge by dragging it or using "Upload files"<br>
+      <strong>4.</strong> Create a <code>README.md</code> file and add the code above<br>
+      <strong>5.</strong> Your certificate is now publicly visible on your repo
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step">
+    <div class="step-num">Step 3</div>
+    <h2>📱 On social media</h2>
+    <p>Your certificate PNG badge is an image you can share directly on any social network.</p>
+    <div class="tip"><strong>What to do?</strong> Download your badge from <a href="https://hormigasais.com" target="_blank" style="color:var(--amarillo)">hormigasais.com</a> → 🏷️ Badge tab. Then:</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;"><strong style="color:#fff;">Instagram / Facebook:</strong></p>
+    <div class="code-block">Post the badge image as a photo.
+In the caption write:
+"Asset certified with the LBH Protocol 🐜
+Signature: CLHQ-XXXXXXXX
+Verify at: hormigasais.com"</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;margin-top:0.8rem;"><strong style="color:#fff;">LinkedIn (recommended for professionals):</strong></p>
+    <div class="code-block">1. Go to your profile → "Licenses & Certifications"
+2. Name: "LBH Certificate — HormigasAIS"
+3. Issuing organization: "HormigasAIS"
+4. Credential URL: https://hormigasais.com
+5. Credential ID: CLHQ-XXXXXXXX</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;margin-top:0.8rem;"><strong style="color:#fff;">Twitter / X:</strong></p>
+    <div class="code-block">Attach the badge image to your tweet:
+"My [logo/design/project] is certified with
+the LBH Protocol 🐜 Signature: CLHQ-XXXXXXXX
+Verify: hormigasais.com #LBH #HormigasAIS"</div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step">
+    <div class="step-num">Step 4</div>
+    <h2>📄 In contracts and digital documents</h2>
+    <p>Your manifest is a cryptographic document that can be attached to contracts to prove ownership of an asset at a specific date.</p>
+    <div class="tip"><strong>What to do?</strong> The file <code>manifest-CLHQ-XXXXXXXX.json</code> contains the signature, SHA-256 hash of the asset, emission date, and the certifying node. Use it like this:</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;"><strong style="color:#fff;">In PDF / Word:</strong></p>
+    <div class="code-block">Attach the manifest-CLHQ-XXXXXXXX.json file
+as "Exhibit A: LBH Intellectual Property Certificate"
+
+Include in the contract text:
+"The asset [name] is certified under the
+LBH Protocol v2.0, signature CLHQ-XXXXXXXX,
+issued on [date], verifiable at hormigasais.com"</div>
+
+    <p style="color:#aaa;font-size:0.78rem;margin-bottom:0.5rem;margin-top:0.8rem;"><strong style="color:#fff;">In digital contracts (DocuSign, Adobe Sign, etc.):</strong></p>
+    <div class="code-block">1. Attach the manifest as an additional document
+2. Include the CLHQ signature in the contract description
+3. The SHA-256 hash in the manifest proves the file
+   has not been modified since the emission date</div>
+
+    <div class="warning"><strong>Legal value:</strong> The LBH manifest is technical evidence of an asset's existence at a specific date. For contracts with full legal value, consult a lawyer in your jurisdiction.</div>
+  </div>
+
+  <div class="final-note">
+    🐜 Questions? Email us at <strong>chrisquionez354@gmail.com</strong><br>
+    Full documentation: <strong>docs.hormigasais.com</strong><br>
+    LBH Protocol v2.0 — Developed in San Miguel, El Salvador
+  </div>
+</div>
+
+</div>
+
+<footer>🐜 HormigasAIS — Nodo <span>A16-SanMiguel-SV</span> — Protocolo <span>LBH v2.0</span></footer>
+
+<script>
+function setLang(lang, btn) {
+  document.querySelectorAll('.lang-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('lang-' + lang).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
