@@ -2,27 +2,162 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Institucionalidad — HormigasAIS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HormigasAIS — Institucionalidad y Registro de Marca</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <style>
-    body { background: #0a0a0a; color: #e8e8e8; font-family: 'Space Mono', monospace; padding: 2rem; }
-    .wrapper { max-width: 800px; margin: 0 auto; }
-    .sdk-title { font-family: 'Syne', sans-serif; font-weight: 800; color: #f5c518; font-size: 1.5rem; }
-    .card { background: #111; border: 1px solid #222; padding: 2rem; border-radius: 12px; margin: 2rem 0; }
-    .btn-primary { background: rgba(245,197,24,0.08); border: 1px solid #f5c518; color: #f5c518; padding: 0.5rem 1rem; text-decoration: none; border-radius: 6px; }
+    * { box-sizing: border-box; }
+    body { background: #0a0a0a; margin: 0; padding: 0; font-family: 'Space Mono', monospace; color: #e8e8e8; }
+    .wrapper { max-width: 800px; margin: 0 auto; padding: 3rem 1.5rem; }
+    .header-title { font-family: 'Syne', sans-serif; font-weight: 800; color: #f5c518; font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .header-sub { font-size: 0.78rem; color: #555; margin-bottom: 0.5rem; }
+    .header-logo { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 2rem; }
+    .header-logo img { width: 64px; height: 64px; border-radius: 50%; border: 2px solid #f5c518; }
+    .bloque { background: #111; border: 1px solid #222; border-radius: 12px; padding: 1.8rem; margin-bottom: 1.5rem; }
+    .bloque-num { font-size: 0.65rem; color: #00ff9f; border: 1px solid #00ff9f33; border-radius: 4px; padding: 0.15rem 0.5rem; margin-bottom: 0.6rem; display: inline-block; }
+    .bloque-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: #fff; margin-bottom: 0.8rem; }
+    .bloque p { font-size: 0.8rem; color: #888; line-height: 1.7; margin-bottom: 0.6rem; }
+    .bloque ul { font-size: 0.8rem; color: #888; line-height: 1.9; padding-left: 1.2rem; }
+    .bloque li { margin-bottom: 0.2rem; }
+    .bloque strong { color: #e8e8e8; }
+    .sello-box { background: #0a0a0a; border: 1px solid #00ff9f33; border-radius: 8px; padding: 1rem; margin: 1rem 0; font-size: 0.75rem; }
+    .sello-box table { width: 100%; border-collapse: collapse; }
+    .sello-box td { padding: 0.3rem 0.5rem; color: #888; border-bottom: 1px solid #1a1a1a; }
+    .sello-box td:first-child { color: #555; width: 140px; }
+    .sello-box td strong { color: #00ff9f; }
+    .hash-box { background: #0a0a0a; border: 1px solid #222; border-radius: 6px; padding: 0.7rem 1rem; font-size: 0.72rem; color: #f5c518; word-break: break-all; margin: 0.8rem 0; }
+    .btn-primary { display: inline-block; background: rgba(245,197,24,0.08); border: 1px solid #f5c518; color: #f5c518; padding: 0.5rem 1rem; border-radius: 6px; font-family: inherit; font-size: 0.78rem; text-decoration: none; margin-right: 0.5rem; margin-top: 0.5rem; }
+    .btn-primary:hover { background: #f5c518; color: #0a0a0a; }
+    .btn-secondary { display: inline-block; background: transparent; border: 1px solid #333; color: #888; padding: 0.5rem 1rem; border-radius: 6px; font-family: inherit; font-size: 0.78rem; text-decoration: none; margin-top: 0.5rem; }
+    .manifest-box { background: #0a0a0a; border: 1px solid #f5c51833; border-radius: 8px; padding: 1rem; font-size: 0.72rem; color: #555; line-height: 1.8; word-break: break-all; }
+    .manifest-box span { color: #f5c518; }
+    .badge-signature { font-size: 0.7rem; color: #555; margin-top: 2rem; border-top: 1px solid #222; padding-top: 1rem; text-align: right; line-height: 1.8; }
+    .badge-signature a { color: #555; text-decoration: none; }
   </style>
 </head>
 <body>
 <div class="wrapper">
-  <div class="sdk-title">🐜 HormigasAIS — Evidence Locker</div>
-  <div class="card">
-    <a href="https://gravatar.com/hormigasais" target="_blank" rel="noopener noreferrer">
-      <img src="https://raw.githubusercontent.com/Thrumanshow/Thrumanshow/main/logo_soberano_hd.png" alt="HormigasAIS" style="width:64px;height:64px;border-radius:50%;border:2px solid #f5c518;">
-    </a>
-    <h3>Certificación de Origen</h3>
-    <p>Identidad vinculada: CLHQ / HormigasAIS. Hash: 667ba553920124a348c81e676baf3c25</p>
-    <a href="https://github.com/Thrumanshow/HormigasAIS-Institucionalidad" class="btn-primary">Ver Repositorio Sellado</a>
+
+  <div class="header-logo">
+    <img src="https://raw.githubusercontent.com/Thrumanshow/Thrumanshow/main/logo_soberano_hd.png" alt="HormigasAIS Logo">
+    <div>
+      <div class="header-title">🐜 HormigasAIS — Institucionalidad</div>
+      <div class="header-sub">Registro de Marca y Propiedad Intelectual · Nodo A16-SanMiguel-SV</div>
+    </div>
   </div>
+
+  <!-- BLOQUE 1 -->
+  <div class="bloque">
+    <span class="bloque-num">BLOQUE 1</span>
+    <div class="bloque-title">Política de Marcas Registradas</div>
+    <p>El nombre <strong>"HormigasAIS"</strong>, el logotipo de la hormiga, <strong>"Nodo XOXO"</strong>,
+    <strong>"LBH Protocol"</strong>, <strong>"Lenguaje Binario HormigasAIS"</strong> y cualquier otro
+    nombre o diseño distintivo asociado son marcas de servicio y propiedad intelectual
+    exclusiva de HormigasAIS.</p>
+    <p>La licencia de código abierto MPL 2.0 <strong>NO otorga</strong> ningún derecho para
+    usar estas marcas en productos de terceros.</p>
+    <p>Contacto: <strong>clhq@hormigasais.com</strong></p>
+  </div>
+
+  <!-- BLOQUE 2 -->
+  <div class="bloque">
+    <span class="bloque-num">BLOQUE 2</span>
+    <div class="bloque-title">Enterprise &amp; Soberanía Tecnológica</div>
+    <p>HormigasAIS ofrece despliegues de infraestructura propietaria, nodos maestros
+    (Arquitectura A16) y adaptación del protocolo LBH para entornos corporativos,
+    industriales y gobiernos que requieran soberanía digital total.</p>
+    <ul>
+      <li>Licenciamiento de Infraestructura Edge Soberana (Nodos Privados)</li>
+      <li>Integración empresarial del SDK LBH (Soporte SLA)</li>
+      <li>Auditoría e implementación de Protocolos M2M seguros</li>
+    </ul>
+    <a href="mailto:clhq@hormigasais.com" class="btn-primary">Solicitar Propuesta Comercial</a>
+  </div>
+
+  <!-- BLOQUE 3 -->
+  <div class="bloque">
+    <span class="bloque-num">BLOQUE 3</span>
+    <div class="bloque-title">Clasificación Internacional (Clases Niza)</div>
+    <p><strong>Clase 9:</strong> Software descargable, protocolos de comunicación de datos
+    (LBH Protocol), SDK, interfaces de inteligencia distribuida, Edge Computing, IoT, M2M.</p>
+    <p><strong>Clase 42:</strong> Desarrollo de software, consultoría en IA, Edge Computing
+    soberano, investigación en protocolos binarios y sistemas multiagente.</p>
+    <p><strong>Clase 38:</strong> Telecomunicaciones, transmisión de datos mediante protocolos
+    propietarios, acceso a bases de datos, redes seguras.</p>
+  </div>
+
+  <!-- BLOQUE 4 -->
+  <div class="bloque">
+    <span class="bloque-num">BLOQUE 4</span>
+    <div class="bloque-title">Propiedad Visual y Logotipo</div>
+    <p><strong>Solicitud A — Marca Denominativa:</strong> HORMIGASAIS (con o sin espacio).</p>
+    <p><strong>Solicitud B — Marca Figurativa:</strong> Figura estilizada de una hormiga
+    compuesta por nodos binarios, en colores negro (#0a0a0a), ámbar (#f5c518) y blanco (#e8e8e8).
+    Archivo: logo_soberano_hd.png (257,288 bytes, PNG).</p>
+    <p>Sello criptográfico verificable públicamente:</p>
+    <div class="sello-box">
+      <table>
+        <tr><td>Firma LBH</td><td><strong>CLHQ-Q5PTRLA0</strong></td></tr>
+        <tr><td>Estado</td><td><strong style="color:#00ff9f">✅ AUTÉNTICO</strong></td></tr>
+        <tr><td>Propietario</td><td>HormigasAIS</td></tr>
+        <tr><td>Activo sellado</td><td>logo_soberano_hd.png</td></tr>
+        <tr><td>Nodo emisor</td><td>A16-SanMiguel-SV</td></tr>
+        <tr><td>Fecha emisión</td><td>2026-05-08 05:24:59 UTC</td></tr>
+      </table>
+    </div>
+    <a href="https://hormigasais.com" target="_blank" class="btn-primary">🔍 Verificar sello</a>
+    <a href="https://raw.githubusercontent.com/Thrumanshow/Thrumanshow/main/logo_soberano_hd.png" target="_blank" class="btn-secondary">📥 Logo HD</a>
+  </div>
+
+  <!-- BLOQUE 5 -->
+  <div class="bloque">
+    <span class="bloque-num">BLOQUE 5</span>
+    <div class="bloque-title">Nodos y Submarcas Oficiales</div>
+    <ul>
+      <li><strong>HormigasAIS-Nodo-Escuela</strong> — Nodo educativo de borde. Estado: Operativo.</li>
+      <li><strong>HormigasAIS--LBH--Protocol</strong> — Estándar de comunicación binaria. Estado: Publicado.</li>
+      <li><strong>HormigasAIS-Protocol-Node</strong> — Motor de ejecución M2M. Estado: Producción.</li>
+    </ul>
+    <p>Cualquier uso no autorizado de la nomenclatura <strong>HormigasAIS-[Nombre]</strong>
+    viola los términos de este registro.</p>
+  </div>
+
+  <!-- BLOQUE 6 -->
+  <div class="bloque">
+    <span class="bloque-num">BLOQUE 6</span>
+    <div class="bloque-title">LICENSE MESENTERY v1.0</div>
+    <p>Marco de Soberanía Digital que envuelve todos los activos del ecosistema HormigasAIS:
+    SDK LBH (MPL 2.0), infraestructura de producción (propietaria), protocolos LBH
+    y submarcas registradas.</p>
+    <p>El incumplimiento de cualquier cláusula revoca todos los derechos concedidos
+    por las licencias de código fuente adjuntas.</p>
+    <a href="https://github.com/Thrumanshow/HormigasAIS-Institucionalidad" target="_blank" class="btn-primary">📂 Ver repositorio sellado</a>
+    <a href="https://docs.hormigasais.com/legal.html" class="btn-secondary">⚖️ Legal</a>
+  </div>
+
+  <!-- MANIFEST -->
+  <div class="bloque">
+    <span class="bloque-num">MANIFEST TOKEN</span>
+    <div class="bloque-title">🔐 Sello Criptográfico — MANIFEST_TOKEN.lbh v2</div>
+    <p>Generado desde el Nodo A16-SanMiguel-SV usando HMAC-SHA256 con clave soberana
+    LBH_SECRET (128 chars). Fecha de sellado inmutable en GitHub.</p>
+    <div class="manifest-box">
+      <span>CERT:</span> LBH-MANIFEST-V2-CLHQ<br>
+      <span>FECHA:</span> 2026-07-11 05:39:35 UTC<br>
+      <span>SELLO PÚBLICO:</span> CLHQ-Q5PTRLA0<br>
+      <span>VERIFICAR:</span> hormigasais.com → Verificar → CLHQ-Q5PTRLA0
+    </div>
+    <a href="https://github.com/Thrumanshow/HormigasAIS-Institucionalidad/blob/main/MANIFEST_TOKEN.lbh" target="_blank" class="btn-primary">📄 Ver MANIFEST_TOKEN.lbh</a>
+  </div>
+
+  <div class="badge-signature">
+    CERT::LBH-INSTITUCIONALIDAD-V1-CLHQ | DOI: 10.5281/zenodo.19177759 | Nodo A16-SanMiguel-SV<br>
+    <a href="https://hormigasais.com">hormigasais.com</a> |
+    <a href="/legal.html">⚖️ Legal</a> |
+    <a href="/sdk.html">📦 SDK</a>
+  </div>
+
 </div>
 </body>
 </html>
